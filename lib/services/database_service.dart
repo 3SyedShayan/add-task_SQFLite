@@ -25,6 +25,7 @@ class DatabaseService {
     ); // Define the database file name
     final database = await openDatabase(
       databasePath,
+      version: 1,
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE $_tasksTableName {
@@ -36,5 +37,9 @@ class DatabaseService {
       },
     ); // Open or create the database
     return database;
+  }
+  void addTask(String content) async {
+    final db = await database;
+    await db.insert(_tasksTableName, {_tasksContentColumnName: content, _tasksStatusColumnName: 0});
   }
 }

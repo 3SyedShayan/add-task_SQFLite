@@ -11,6 +11,7 @@ class DatabaseService {
   final String _tasksStatusColumnName = "status";
   DatabaseService._constructor(); // Private constructor for singleton pattern
   Future<Database> get database async {
+    print('DatabaseService called');
     if (_db != null) return _db!;
     _db = await getDatabase();
     return _db!;
@@ -25,21 +26,25 @@ class DatabaseService {
     ); // Define the database file name
     final database = await openDatabase(
       databasePath,
-      version: 1,
+      version: 2,
       onCreate: (db, version) {
         db.execute('''
-          CREATE TABLE $_tasksTableName {
+          CREATE TABLE $_tasksTableName (
           $_tasksIdColumnName INTEGER PRIMARY KEY,
           $_tasksContentColumnName TEXT NOT NULL,
-          $_tasksStatusColumnName INTEGER NOT NULL,
-          }
+          $_tasksStatusColumnName INTEGER NOT NULL
+          )
           ''');
       },
     ); // Open or create the database
     return database;
   }
+
   void addTask(String content) async {
     final db = await database;
-    await db.insert(_tasksTableName, {_tasksContentColumnName: content, _tasksStatusColumnName: 0});
+    await db.insert(_tasksTableName, {
+      _tasksContentColumnName: content,
+      _tasksStatusColumnName: 0,
+    });
   }
 }

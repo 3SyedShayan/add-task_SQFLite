@@ -1,3 +1,4 @@
+import 'package:add_task/models/tasks.dart';
 import 'package:add_task/services/database_service.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class _HomeState extends State<Home> {
   String? _tasks = null;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(floatingActionButton: _addTaskButton());
+    return Scaffold(floatingActionButton: _addTaskButton(), body: _tasksList());
   }
 
   Widget _addTaskButton() {
@@ -60,6 +61,21 @@ class _HomeState extends State<Home> {
         );
       },
       child: const Icon(Icons.add),
+    );
+  }
+
+  Widget _tasksList() {
+    return FutureBuilder(
+      future: _databaseService.getTasks(),
+      builder: (context, snapshot) {
+        return ListView.builder(
+          itemCount: snapshot.data?.length ?? 0,
+          itemBuilder: (context, index) {
+            Task task = snapshot.data![index];
+            return ListTile(title: Text(task.content));
+          },
+        );
+      },
     );
   }
 }

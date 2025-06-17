@@ -1,3 +1,4 @@
+import 'package:add_task/models/tasks.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -5,7 +6,7 @@ class DatabaseService {
   static Database? _db;
   static final DatabaseService instance =
       DatabaseService._constructor(); // Creates a singleton instance
-  final String _tasksTableName = "tasks";
+  final String _tasksTableName = "task";
   final String _tasksIdColumnName = "id";
   final String _tasksContentColumnName = "content";
   final String _tasksStatusColumnName = "status";
@@ -22,11 +23,11 @@ class DatabaseService {
         await getDatabasesPath(); // Get the default database directory path
     final databasePath = join(
       databaseDirPath,
-      'master_db.db',
+      "master_db.db",
     ); // Define the database file name
     final database = await openDatabase(
       databasePath,
-      version: 2,
+      version: 4,
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE $_tasksTableName (
@@ -46,5 +47,21 @@ class DatabaseService {
       _tasksContentColumnName: content,
       _tasksStatusColumnName: 0,
     });
+  }
+
+  Future<List<Task>> getTasks() async {
+    final db = await database;
+    final data = await db.query(_tasksTableName);
+    List<Task> tasks =
+        data
+            .map(
+              (e) => Task(
+                id: e["id"] as int,
+                content: e["content"] as String,
+                status: e["status"] as int,
+              ),
+            )
+            .toList();
+    return tasks;
   }
 }

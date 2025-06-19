@@ -6,7 +6,7 @@ class DatabaseService {
   static Database? _db;
   static final DatabaseService instance =
       DatabaseService._constructor(); // Creates a singleton instance
-  final String _tasksTableName = "task";
+  final String _tasksTableName = "tasks";
   final String _tasksIdColumnName = "id";
   final String _tasksContentColumnName = "content";
   final String _tasksStatusColumnName = "status";
@@ -27,7 +27,7 @@ class DatabaseService {
     ); // Define the database file name
     final database = await openDatabase(
       databasePath,
-      version: 4,
+      version: 5,
       onCreate: (db, version) {
         db.execute('''
           CREATE TABLE $_tasksTableName (

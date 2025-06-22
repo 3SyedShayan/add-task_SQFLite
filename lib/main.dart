@@ -2,17 +2,14 @@ import 'package:add_task/screens/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp( MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  MainApp({super.key});
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Home(),
-      debugShowCheckedModeBanner: false,
-    );
+    return const MaterialApp(home: Home(), debugShowCheckedModeBanner: false);
   }
 }

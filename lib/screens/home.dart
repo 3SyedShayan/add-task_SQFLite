@@ -13,7 +13,7 @@ class _HomeState extends State<Home> {
   final DatabaseService _databaseService = DatabaseService.instance;
   // Using the singleton instance of DatabaseService
 
-  String? _tasks = null;
+  String? _tasks;
   @override
   Widget build(BuildContext context) {
     return Scaffold(floatingActionButton: _addTaskButton(), body: _tasksList());

@@ -4,13 +4,12 @@ import 'package:path/path.dart';
 
 class DatabaseService {
   static Database? _db;
-  static final DatabaseService instance =
-      DatabaseService._constructor(); // Creates a singleton instance
+  static final DatabaseService instance = DatabaseService._constructor();
   final String _tasksTableName = "tasks";
   final String _tasksIdColumnName = "id";
   final String _tasksContentColumnName = "content";
   final String _tasksStatusColumnName = "status";
-  DatabaseService._constructor(); // Private constructor for singleton pattern
+  DatabaseService._constructor();
   Future<Database> get database async {
     print('DatabaseService called');
     if (_db != null) return _db!;
@@ -19,12 +18,8 @@ class DatabaseService {
   }
 
   Future<Database> getDatabase() async {
-    final databaseDirPath =
-        await getDatabasesPath(); // Get the default database directory path
-    final databasePath = join(
-      databaseDirPath,
-      "master_db.db",
-    ); // Define the database file name
+    final databaseDirPath = await getDatabasesPath();
+    final databasePath = join(databaseDirPath, "master_db.db");
     final database = await openDatabase(
       databasePath,
       version: 5,
@@ -37,7 +32,7 @@ class DatabaseService {
           )
           ''');
       },
-    ); // Open or create the database
+    );
     return database;
   }
 
@@ -63,5 +58,15 @@ class DatabaseService {
             )
             .toList();
     return tasks;
+  }
+
+  void updateTaskStatus(int id, int status) async {
+    final db = await database;
+    await db.update(
+      _tasksTableName,
+      {_tasksStatusColumnName: status},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

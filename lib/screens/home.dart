@@ -72,7 +72,19 @@ class _HomeState extends State<Home> {
           itemCount: snapshot.data?.length ?? 0,
           itemBuilder: (context, index) {
             Task task = snapshot.data![index];
-            return ListTile(title: Text(task.content));
+            return ListTile(
+              title: Text(task.content),
+              trailing: Checkbox(
+                value: task.status == 1,
+                onChanged: (value) {
+                  _databaseService.updateTaskStatus(
+                    task.id,
+                    value == true ? 1 : 0,
+                  );
+                  setState(() {});
+                },
+              ),
+            );
           },
         );
       },

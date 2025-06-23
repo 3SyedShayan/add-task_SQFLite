@@ -73,6 +73,10 @@ class _HomeState extends State<Home> {
           itemBuilder: (context, index) {
             Task task = snapshot.data![index];
             return ListTile(
+              onLongPress: () {
+                _databaseService.deleteTask(task.id);
+                setState(() {});
+              },
               title: Text(task.content),
               trailing: Checkbox(
                 value: task.status == 1,

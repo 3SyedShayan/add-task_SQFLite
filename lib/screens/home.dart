@@ -72,21 +72,29 @@ class _HomeState extends State<Home> {
           itemCount: snapshot.data?.length ?? 0,
           itemBuilder: (context, index) {
             Task task = snapshot.data![index];
-            return ListTile(
-              onLongPress: () {
+            return Dismissible(
+              key: Key(task.id.toString()),
+              direction: DismissDirection.endToStart,
+              onDismissed: (_) {
                 _databaseService.deleteTask(task.id);
                 setState(() {});
               },
-              title: Text(task.content),
-              trailing: Checkbox(
-                value: task.status == 1,
-                onChanged: (value) {
-                  _databaseService.updateTaskStatus(
-                    task.id,
-                    value == true ? 1 : 0,
-                  );
+              child: ListTile(
+                onLongPress: () {
+                  _databaseService.deleteTask(task.id);
                   setState(() {});
                 },
+                title: Text(task.content),
+                trailing: Checkbox(
+                  value: task.status == 1,
+                  onChanged: (value) {
+                    _databaseService.updateTaskStatus(
+                      task.id,
+                      value == true ? 1 : 0,
+                    );
+                    setState(() {});
+                  },
+                ),
               ),
             );
           },
